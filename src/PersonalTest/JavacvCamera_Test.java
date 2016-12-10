@@ -1,4 +1,4 @@
-package ReferenceCode;
+package PersonalTest;
 
 import org.bytedeco.javacv.CanvasFrame;
 import org.bytedeco.javacv.Frame;
@@ -9,7 +9,7 @@ import javax.swing.*;
 /**
  * Created by root on 12/10/16.
  */
-public class JavacvCameraTest {
+public class JavacvCamera_Test {
     public static void main(String[] args) throws Exception{
         OpenCVFrameGrabber grabber = new OpenCVFrameGrabber(0);
         grabber.start();
@@ -24,7 +24,12 @@ public class JavacvCameraTest {
                 System.exit(2);
             }
 
-            canvas.showImage(grabber.grab());
+            Frame fr = grabber.grab();
+
+            System.out.println("limit = " + fr.image[0].limit());
+            System.out.println("Buffer[]long = " + fr.image.length);
+
+            canvas.showImage(fr);
             Thread.sleep(50);
         }
     }
