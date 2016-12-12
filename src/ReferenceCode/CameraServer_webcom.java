@@ -2,27 +2,57 @@ package ReferenceCode;
 
 import com.github.sarxos.webcam.Webcam;
 
-import javax.imageio.ImageIO;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.Socket;
-import java.nio.ByteBuffer;
-import java.nio.channels.DatagramChannel;
-import java.sql.SQLOutput;
-import java.util.concurrent.Executor;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+
 
 /**
  * Created by root on 12/11/16.
  */
-public class CameraServer_webcom {
-    public static void main(String[] args) throws Exception {
-        Webcam webcam = Webcam.getDefault();
+public class CameraServer_webcom extends JPanel {
+    private BufferedImage image = null;
+    private Webcam webcam = null;
 
-        webcam.open();
+    private int winHeight = 500;
+    private int winWidth = 700;
 
-        ImageIO.write(webcam.getImage(),"png",new File("output.png"));
-
+    public int getWinHeight() {
+        return winHeight;
     }
+
+    public int getWinWidth() {
+        return winWidth;
+    }
+
+    public CameraServer_webcom (){
+        webcam = Webcam.getDefault();
+        webcam.open();
+    }
+
+    public void paint(Graphics g){
+        super.paint(g);
+        g.drawImage(image , 0, 0, image.getWidth()*2, image.getHeight()*2, null);
+    }
+
+    public void grab(){
+        image = webcam.getImage();
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        CameraServer_webcom cwb = new CameraServer_webcom();
+        JFrame w = new JFrame();
+        w.setSize(cwb.getWinWidth(),cwb.getWinHeight());
+
+        w.add(cwb);
+
+        w.setVisible(true);
+
+        while(true){
+            cwb.grab();
+            cwb.repaint();
+            Thread.sleep(50);
+        }
+    }
+
 }
